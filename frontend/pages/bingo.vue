@@ -12,14 +12,16 @@
     </v-col>
     <v-col cols="9">
       <v-card
-        class="rounded-xl ms-3 ma-10 elevation-10 pa-6 bg-light-blue-lighten-3"
+        class="rounded-xl ms-3 ma-10 elevation-10 pa-6 bg-green-lighten-2"
       >
         <h1 class="d-flex justify-center my-6" style="font-size: 50px">
           Bingo
         </h1>
 
         <div class="d-flex justify-center">
-          <v-card class="number text-center">{{ bingo_number }}</v-card>
+          <v-card class="number rounded-xl text-center">{{
+            bingo_number
+          }}</v-card>
         </div>
         <div class="d-flex justify-center pa-5">
           <v-btn class="mx-2 bg-success" @click="nextnumber(), next()"
@@ -38,7 +40,7 @@
             width: 80px;
             height: 65px;
             text-align: center;
-            background-color: rgba(217, 158, 40, 0.838);
+            background-color: rgb(255, 171, 60);
           "
           >{{ h }}</span
         >
@@ -46,7 +48,7 @@
     </v-col>
   </v-row>
 </template>
-<style>
+<style scoped>
 .number {
   font-size: 120px;
   width: 600px;
