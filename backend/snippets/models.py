@@ -21,6 +21,9 @@ class Snippet(models.Model):
         default="1",
     )
 
+    def __str__(self) -> str:
+        return self.question
+
 
 class Highest(models.Model):
     name = models.CharField(max_length=255)
