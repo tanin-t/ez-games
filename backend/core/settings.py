@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['http://games.ez-zone.com', 'https://games.ez-zone.com']
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
