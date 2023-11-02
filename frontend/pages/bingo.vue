@@ -2,7 +2,15 @@
   <v-row>
     <v-col cols="3">
       <v-card class="rounded-xl my-10 ms-5 elevation-10 bg-green-lighten-3">
-        <h1 class="d-flex justify-center my-6" style="font-size: 50px">
+        <div class="d-flex justify-center">
+          <v-btn
+            class="my-3 rounded-lg elevation-10 bg-green-darken-3"
+            width="200px"
+            @click="getPlayer()"
+            >Reset</v-btn
+          >
+        </div>
+        <h1 class="d-flex justify-center mb-5" style="font-size: 50px">
           player
         </h1>
         <div class="ms-6 pa-3" style="font-size: 40px" v-for="i in new_player">
