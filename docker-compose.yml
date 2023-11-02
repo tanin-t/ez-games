@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: ezgame_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NITRO_HOST=0.0.0.0
+      - NITRO_PORT=3000
+
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: ezgame_backend
+    volumes:
+      - ./backend/.db:/app/.db
+    ports:
+      - "8000:8000"
+
+  nginx_proxy_manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./nginx-proxy-manager/data:/data
+      - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
