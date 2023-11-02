@@ -29,3 +29,8 @@ services:
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+
+networks:
+  default:
+    external: true
+    name: main
