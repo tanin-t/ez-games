@@ -126,7 +126,7 @@
     console.log(left.value);
     disabledL.value = true;
     if (disabledR.value) {
-      if (left.value == right.value) {
+      if (left.value.url == right.value.url) {
         left.value.status = "clear";
         right.value.status = "clear";
         disabledL.value = false;
