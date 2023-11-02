@@ -1,4 +1,4 @@
-name: remote ssh command
+name: Deploy to NC
 on: [push, workflow_dispatch]
 jobs:
   build:
@@ -13,4 +13,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: whoami
+        script: /home/nc-user/ez-games/deploy.sh
