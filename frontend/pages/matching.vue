@@ -129,6 +129,8 @@
       if (left.value == right.value) {
         left.value.status = "clear";
         right.value.status = "clear";
+        disabledL.value = false;
+        disabledR.value = false;
       }
     }
   }
