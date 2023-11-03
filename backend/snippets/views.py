@@ -20,22 +20,23 @@ class SnippetList(APIView):
 
 
 class HighestList(APIView):
-    def get(self, request):
-        highest = Highest.objects.all().order_by("-score")
+   def get(self, request):
+    highest = Highest.objects.all()
+    if highest:
+            serializer_high = HighestSerializer(highest, many=True)
+           
+            return Response(serializer_high.data)
+    else:
+        # Handle the case when the list is empty
+        return Response([], status=status.HTTP_204_NO_CONTENT)
+   
 
-        serializer_high = HighestSerializer(highest, many=True)
-        print(
-            "Name:",
-            highest[0].name,
-            " ",
-            "Score:",
-            highest[0].score,
-        )
-        return Response(serializer_high.data)
-
-    def post(self, request):
+   def post(self, request):
         serializer = HighestSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    
