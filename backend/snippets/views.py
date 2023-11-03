@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import random
+from django.http import JsonResponse
 
 
 class SnippetList(APIView):
@@ -38,14 +39,29 @@ class HighestList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
    
-   def put(self,request,id):
-       print("id",id)
-       validator = HighestSerializer(data = request.data)
-       validator.is_valid(raise_exception=True)
-       highest = Highest.objects.get(id=id)
-       highest.score = request.data
-       highest.save()
-       return Response(highest.data)
+   def put(self, request, id):
+        print("id", id)
+        
+        validator = HighestSerializer(data=request.data)
+        
+        validator.is_valid(raise_exception=True)
+        
+        highest = Highest.objects.get(id=id)
+        
+        data = request.data
+        print("---------------------", data, data["score"])
+        
+        highest.score = data["score"]
+        highest.save()
+        
+        # Return a JSON response with the updated data
+        response_data = {
+            "id": highest.id,
+            "score": highest.score,
+            # Add other fields you want to include in the response
+        }
+        
+        return JsonResponse(response_data)
 
        
 
