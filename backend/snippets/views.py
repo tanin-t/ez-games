@@ -39,6 +39,7 @@ class HighestList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
    
    def put(self,request,id):
+       print("id",id)
        validator = HighestSerializer(data = request.data)
        validator.is_valid(raise_exception=True)
        highest = Highest.objects.get(id=id)
