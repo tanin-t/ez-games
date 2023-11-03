@@ -6,7 +6,7 @@
           <v-img
             class="text-white mx-0"
             height="300"
-            src="public/Untitled-2.png"
+            :src="question"
             cover
           >
             <v-row no-gutters>
@@ -83,8 +83,8 @@
   
   <script setup>
   import { ref, onMounted } from "vue";
-  const buttons_left = ref(
-    shuffle([
+  const L = ref(
+    [
       { url: "public/IMG_565.jpg", status: "close" },
       { url: "public/IMG_5640.jpg", status: "close" },
       { url: "public/IMG_5642.jpg", status: "close" },
@@ -94,10 +94,10 @@
       { url: "public/IMG_5646.jpg", status: "close" },
       { url: "public/IMG_5650.jpg", status: "close" },
       { url: "public/IMG_5652.jpg", status: "close" },
-    ])
+    ]
   );
-  const buttons_right = ref(
-    shuffle([
+  const R= ref(
+    [
       { url: "public/IMG_565.jpg", status: "close" },
       { url: "public/IMG_5640.jpg", status: "close" },
       { url: "public/IMG_5642.jpg", status: "close" },
@@ -107,18 +107,30 @@
       { url: "public/IMG_5646.jpg", status: "close" },
       { url: "public/IMG_5650.jpg", status: "close" },
       { url: "public/IMG_5652.jpg", status: "close" },
-    ])
+    ]
   );
-  
+  const buttons_left = ref([])
+  const buttons_right = ref([])  
   const alphabets = ref(["A", "B", "C", "D", "E", "F", "G", "H", "I"]);
   const numbers = ref(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
   const left = ref("");
   const right = ref("");
   const disabledL = ref(false);
   const disabledR = ref(false);
+  const questions = ref(["public/IMG_565.jpg","public/IMG_5642.jpg"])
+  const question = ref('')
   onMounted(() => {
-    AddProperty();
+    ShuffleButton();
   });
+
+  function ShuffleButton(){
+    buttons_left.value = shuffle(L.value)
+    buttons_right.value = shuffle(R.value)
+    question.value = shuffle(questions.value)[0]
+
+    AddProperty()
+  }
+
   function AddProperty() {
     for (let i in buttons_left.value) {
       buttons_left.value[i].label = alphabets.value[i];
@@ -191,9 +203,10 @@
     }
   }
 
-  function next() {
+  function next() { 
     disabledL.value = false
     disabledR.value = false
+    ShuffleButton()
     for(let i of buttons_left.value){
       i.status = 'close'
     }
