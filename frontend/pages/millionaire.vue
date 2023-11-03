@@ -130,7 +130,7 @@
   </div>
 
   <div id="showQ" class="show-question pa-3">
-    <div v-if="questions.length > 0">{{ questions[count].question }} ?</div>
+    <div v-if="questions.length > 0">{{ questions[count].question }}</div>
   </div>
   <div class="flex-container">
     <button :disabled="stop" :class="btn[0]" id="b1" @click="handleBtnClick(1)">
