@@ -17,7 +17,7 @@
                     v-if="i.status == 'close'"
                     elevation="0"
                     color="black"
-                    style="height: 90px; width: 100px"
+                    style="height: 90px; width: 100px; font-size: large;"
                     class="text-white mx-0"
                     rounded="0"
                     @click="OpencardLeft(i)"
@@ -44,7 +44,7 @@
                     :disabled="disabledR"
                     elevation="0"
                     color="pink"
-                    style="height: 90px; width: 100px"
+                    style="height: 90px; width: 100px; font-size: large;"
                     class="text-black mx-0"
                     rounded="0"
                     @click="OpencardRight(i)"
@@ -71,8 +71,8 @@
           <v-btn block @click="clear()">clear</v-btn>
         </div>
         <div class="d-flex justify-space-between my-2">
-          <v-btn @click="answer()">answer</v-btn>
-          <v-btn color="success" @click="next()">Next</v-btn>
+          <div><v-btn style="width: 300px;" color="red" @click="answer()">answer</v-btn></div>
+          <div><v-btn style="width: 300px;" color="success" @click="next()">Next</v-btn></div>
         </div>
         
       </div>
@@ -84,11 +84,11 @@
   import { ref, onMounted } from "vue";
   const L = ref(
     [
-      { url: "public/IMG_565.jpg", status: "close" },
-      { url: "public/IMG_5640.jpg", status: "close" },
-      { url: "public/IMG_5642.jpg", status: "close" },
-      { url: "public/IMG_5643.jpg", status: "close" },
-      { url: "public/IMG_5644.jpg", status: "close" },
+      { url: "public/i1.png", status: "close" },
+      { url: "public/i2.png", status: "close" },
+      { url: "public/i3.png", status: "close" },
+      { url: "public/i4.png", status: "close" },
+      { url: "public/i5.png", status: "close" },
       { url: "public/IMG_5645.jpg", status: "close" },
       { url: "public/IMG_5646.jpg", status: "close" },
       { url: "public/IMG_5650.jpg", status: "close" },
@@ -97,11 +97,11 @@
   );
   const R= ref(
     [
-      { url: "public/IMG_565.jpg", status: "close" },
-      { url: "public/IMG_5640.jpg", status: "close" },
-      { url: "public/IMG_5642.jpg", status: "close" },
-      { url: "public/IMG_5643.jpg", status: "close" },
-      { url: "public/IMG_5644.jpg", status: "close" },
+    { url: "public/i1.png", status: "close" },
+      { url: "public/i2.png", status: "close" },
+      { url: "public/i3.png", status: "close" },
+      { url: "public/i4.png", status: "close" },
+      { url: "public/i5.png", status: "close" },
       { url: "public/IMG_5645.jpg", status: "close" },
       { url: "public/IMG_5646.jpg", status: "close" },
       { url: "public/IMG_5650.jpg", status: "close" },
@@ -116,7 +116,7 @@
   const right = ref("");
   const disabledL = ref(false);
   const disabledR = ref(false);
-  const questions = ref(["public/image1.jpg","public/IMG_5642.jpg"])
+  const questions = ref(["public/sao.jpg",])
   const question = ref('')
   onMounted(() => {
     ShuffleButton();
