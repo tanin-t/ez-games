@@ -7,6 +7,7 @@ WORKDIR /app
 ADD ./requirements.txt /app
 
 # Install any needed packages specified in requirements.txt
+RUN pip install gunicorn
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Add the current directory contents into the container at /app
@@ -16,4 +17,5 @@ ADD . /app
 EXPOSE 80
 
 # Run app.py when the container launches
-CMD ["python", "manage.py", "runserver"]
+# CMD ["python", "manage.py", "runserver"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]

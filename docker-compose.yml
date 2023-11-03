@@ -12,7 +12,8 @@ services:
 
   backend:
     build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn --bind 0.0.0.0:8000 --workers 2 core.wsgi:application 
     container_name: ezgame_backend
     volumes:
       - ./backend/.db:/app/.db
