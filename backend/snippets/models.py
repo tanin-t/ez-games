@@ -29,5 +29,5 @@ class Highest(models.Model):
     # name = models.CharField(max_length=255)
     # score = models.IntegerField(default=1)
     # input = models.BooleanField(default=False)
-    score = models.JSONField()
+    score = models.JSONField(null=True)
 
