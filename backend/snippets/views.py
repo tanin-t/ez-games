@@ -21,7 +21,7 @@ class SnippetList(APIView):
 
 class HighestList(APIView):
    def get(self, request):
-    highest = Highest.objects.all().order_by("-score")[:3]
+    highest = Highest.objects.all()
     if highest:
             serializer_high = HighestSerializer(highest, many=True)
            
