@@ -117,7 +117,7 @@
   const right = ref("");
   const disabledL = ref(false);
   const disabledR = ref(false);
-  const questions = ref(["public/IMG_565.jpg","public/IMG_5642.jpg"])
+  const questions = ref(["public/image1.jpg","public/IMG_5642.jpg"])
   const question = ref('')
   onMounted(() => {
     ShuffleButton();
