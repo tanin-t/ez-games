@@ -28,7 +28,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 16px;
-  height: 200px;
+  min-height: 200px;
   border: 10px solid rgb(222, 215, 75);
   background-color: green;
   margin: 5px;
@@ -68,62 +68,96 @@
 
 <template>
   <!-- Total  -->
-  <v-row>
-    <v-col cols="4"></v-col>
-    <v-col cols="4" class="text-center">
-      <div class="score">
+  <div class="d-flex justify-space-between">
+    <div class="w-25"></div>
+    <div>
+      <div class="score my-3">
         {{ count }}
       </div>
-    </v-col>
-    <v-col cols="4" class="justify-end d-flex align-center">
-      <v-dialog v-model="dialog" width="500">
+    </div>
+    <div class="w-25 d-flex justify-end align-center">
+      <v-dialog v-model="dialog" persistent width="500">
         <template v-slot:activator="{ props }">
-          <v-btn
-            color=""
-            variant="plaint"
-            icon="mdi-crown-circle"
-            size="x-large"
-            class="me-3 text-h4"
-            v-bind="props"
-          ></v-btn>
+          <v-btn size="x-large" class="me-3" v-bind="props">
+            <v-icon color="amber" class="text-h4">mdi-crown-circle</v-icon>
+          </v-btn>
         </template>
 
-        <template v-slot:default="{ isActive }">
-          <v-card title="Dialog">
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
+        <template v-slot:default="{}">
+          <v-card class="pa-3" title="Dialog">
+            <v-table>
+              <thead>
+                <tr>
+                  <th class="text-left" style="width: 100px">No.</th>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in rank.score" :key="item">
+                  <td>{{ index + 1 }}</td>
+                  <td v-if="item.input">
+                    <v-text-field
+                      label="Enter your name"
+                      variant="underlined"
+                      v-model="item.name"
+                    >
+                    </v-text-field>
+                  </td>
+                  <td v-else>{{ item.name }}</td>
+                  <td>{{ item.score }}</td>
+                </tr>
+              </tbody>
+            </v-table>
+            <div class="text-center mt-3">
               <v-btn
-                text="Close Dialog"
-                @click="isActive.value = false"
+                :hidden="statusBTN"
+                color="red"
+                text="Close"
+                @click="dialog = !dialog"
               ></v-btn>
-            </v-card-actions>
+              <v-btn
+                :hidden="!statusBTN"
+                color="green"
+                text="Save"
+                @click="saveScore()"
+              ></v-btn>
+            </div>
           </v-card>
         </template>
       </v-dialog>
-    </v-col>
-  </v-row>
-
-  <div v-if="questions.length > 0" id="showQ" class="show-question">
-    <div>{{ questions[count].question }}</div>
+    </div>
   </div>
-  <div v-if="questions.length > 0" class="flex-container">
+
+  <div id="showQ" class="show-question pa-3">
+    <div v-if="questions.length > 0">{{ questions[count].question }} ?</div>
+  </div>
+  <div class="flex-container">
     <button :disabled="stop" :class="btn[0]" id="b1" @click="handleBtnClick(1)">
-      {{ questions[count].choice1 }}
+      <div v-if="questions.length > 0">
+        {{ questions[count].choice1 }}
+      </div>
     </button>
     <button :disabled="stop" :class="btn[1]" id="b2" @click="handleBtnClick(2)">
-      {{ questions[count].choice2 }}
+      <div v-if="questions.length > 0">
+        {{ questions[count].choice2 }}
+      </div>
     </button>
     <button :disabled="stop" :class="btn[2]" id="b3" @click="handleBtnClick(3)">
-      {{ questions[count].choice3 }}
+      <div v-if="questions.length > 0">
+        {{ questions[count].choice3 }}
+      </div>
     </button>
     <button :disabled="stop" :class="btn[3]" id="b4" @click="handleBtnClick(4)">
-      {{ questions[count].choice4 }}
+      <div v-if="questions.length > 0">
+        {{ questions[count].choice4 }}
+      </div>
     </button>
   </div>
   <div class="text-center">
-    <v-btn :hidden="next" @click="nextbtn()" color="green">NEXT</v-btn>
-    <v-btn :hidden="reset" @click="resetgame()" color="red">reset</v-btn>
+    <v-btn :hidden="next" @click="nextbtn()" color="primary">NEXT</v-btn>
+    <v-btn :hidden="finish" @click="checkScore(1)" color="green">FINISH</v-btn>
+    <v-btn :hidden="reset" @click="checkScore(0)" color="red">reset</v-btn>
 
     <!-- dialog -->
   </div>
@@ -137,8 +171,12 @@ const dialog = ref(false);
 let btn = ref(["", "", "", ""]);
 const st = ref("button");
 const next = ref(true);
+const finish = ref(true);
 const reset = ref(true);
 const stop = ref(false);
+const statusBTN = ref(false);
+
+const rank = ref({});
 
 function handleBtnClick(studentAns) {
   console.log(btn.value[0] + "disabled");
@@ -146,7 +184,11 @@ function handleBtnClick(studentAns) {
   console.log(keyAns);
   if (keyAns == studentAns) {
     btn.value[studentAns - 1] = "green";
-    next.value = false;
+    if (count.value + 1 == questions.value.length) {
+      finish.value = false;
+    } else {
+      next.value = false;
+    }
   } else {
     btn.value[studentAns - 1] = "red";
     btn.value[keyAns - 1] = "green";
@@ -170,12 +212,47 @@ function resetgame() {
   reset.value = true;
 }
 
-function checkScore() {}
+function checkScore(point) {
+  statusBTN.value = true;
+  dialog.value = true;
+  const totalScore = point + count.value;
+  if (rank.value.score.length > 0 && rank.value.score.length < 6) {
+    let dataScore = { name: "", score: totalScore, input: true };
+    rank.value.score.forEach((element, index) => {
+      console.log(index);
+      if (dataScore.score >= element.score) {
+        console.log(">");
+        let keepScore = element;
+        rank.value.score[index] = dataScore;
+        dataScore = keepScore;
+      }
+    });
+  } else {
+    console.log(rank.value);
+    rank.value.score = [
+      { name: "", score: totalScore, input: true },
+      { name: "", score: 0, input: false },
+      { name: "", score: 0, input: false },
+      { name: "", score: 0, input: false },
+      { name: "", score: 0, input: false },
+    ];
+    console.log(rank.value);
+  }
+  finish.value = true;
+}
+
+function saveScore() {
+  rank.value.score.forEach((element) => {
+    element.input = false;
+  });
+  statusBTN.value = !statusBTN.value;
+  console.log(rank.value);
+  resetgame();
+  postScore();
+}
 
 async function getData() {
-  const response = await fetch(
-    "https://games.ez-zone.com/api/snippets/data/"
-  );
+  const response = await fetch("https://games.ez-zone.com/api/snippets/data/");
 
   const data = await response.json();
   console.log("this is data", data);
@@ -183,5 +260,38 @@ async function getData() {
   console.log(questions.value);
 }
 
+async function getScore() {
+  const response = await fetch(
+    "http://games.ez-zone.com:8000/api/snippets/score/"
+  );
+  const data = await response.json();
+  console.log("data", data[0].score);
+  if (data[0].score == "sfsdf") {
+    data[0].score = [];
+    rank.value = data[0];
+    console.log("this is score if", rank.value);
+  } else {
+    rank.value = data[0];
+    console.log("this is score else", rank.value);
+  }
+}
+
+async function postScore() {
+  console.log(rank.value.score);
+  await fetch(
+    `https://games.ez-zone.com/api/snippets/score/${rank.value.score}/update/`,
+    {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        score: rank.value.score,
+      }),
+    }
+  );
+}
+
+getScore();
 getData();
 </script>
