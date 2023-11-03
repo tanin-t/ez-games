@@ -1,7 +1,7 @@
 <template>
     <v-app>
       <v-main>
-        <div class="container">
+        <div class="container mx-auto" style="width: 600px;">
         <v-card class="mx-auto" max-width="600" max-height="270">
           <v-img
             class="text-white mx-0"
@@ -29,7 +29,6 @@
                     style="height: 90px; width: 100px"
                     :src="i.url"
                   >
-             
   
                   <div
                     v-if="i.status == 'clear'"
@@ -68,10 +67,10 @@
             </v-row>
           </v-img>
         </v-card>
-        <div class="my-2 mx-8">
+        <div class="my-2">
           <v-btn block @click="clear()">clear</v-btn>
         </div>
-        <div class="d-flex justify-space-between my-2 mx-8">
+        <div class="d-flex justify-space-between my-2">
           <v-btn @click="answer()">answer</v-btn>
           <v-btn color="success" @click="next()">Next</v-btn>
         </div>
