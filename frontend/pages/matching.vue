@@ -1,7 +1,8 @@
 <template>
     <v-app>
       <v-main>
-        <v-card class="mx-auto" max-width="600" max-height="300">
+        <div class="container">
+        <v-card class="mx-auto" max-width="600" max-height="270">
           <v-img
             class="text-white mx-0"
             height="300"
@@ -16,7 +17,7 @@
                     v-if="i.status == 'close'"
                     elevation="0"
                     color="black"
-                    style="height: 100px; width: 100px"
+                    style="height: 90px; width: 100px"
                     class="text-white mx-0"
                     rounded="0"
                     @click="OpencardLeft(i)"
@@ -25,14 +26,14 @@
   
                   <img
                     v-if="i.status == 'open'"
-                    style="height: 100px; width: 100px"
+                    style="height: 90px; width: 100px"
                     :src="i.url"
                   >
              
   
                   <div
                     v-if="i.status == 'clear'"
-                    style="height: 100px; width: 100px"
+                    style="height: 90px; width: 100px"
                   ></div>
                 </template>
               </v-col>
@@ -44,7 +45,7 @@
                     :disabled="disabledR"
                     elevation="0"
                     color="pink"
-                    style="height: 100px; width: 100px"
+                    style="height: 90px; width: 100px"
                     class="text-black mx-0"
                     rounded="0"
                     @click="OpencardRight(i)"
@@ -53,21 +54,29 @@
   
                   <img
                     v-if="i.status == 'open'"
-                    style="height: 100px; width: 100px"
+                    style="height: 90px; width: 100px"
                     :src="i.url"
                   >
       
   
                   <div
                     v-if="i.status == 'clear'"
-                    style="height: 100px; width: 100px"
+                    style="height: 90px; width: 100px"
                   ></div>
                 </template>
               </v-col>
             </v-row>
           </v-img>
         </v-card>
-        <v-btn @click="next()">Next</v-btn>
+        <div class="my-2 mx-8">
+          <v-btn block @click="clear()">clear</v-btn>
+        </div>
+        <div class="d-flex justify-space-between my-2 mx-8">
+          <v-btn @click="answer()">answer</v-btn>
+          <v-btn color="success" @click="next()">Next</v-btn>
+        </div>
+        
+      </div>
       </v-main>
     </v-app>
   </template>
@@ -131,6 +140,12 @@
         right.value.status = "clear";
         disabledL.value = false;
         disabledR.value = false;
+        left.value = ""
+        right.value = ""
+        new Audio("public/yeah.mp3").play()
+      }
+      else{
+        new Audio("public/oh-no.mp3").play()
       }
     }
   }
@@ -146,15 +161,45 @@
         right.value.status = "clear";
         disabledL.value = false;
         disabledR.value = false;
+        left.value = ""
+        right.value = ""
+        new Audio("public/yeah.mp3").play()
+      }
+      else{
+        new Audio("public/oh-no.mp3").play()
       }
     }
   }
   
+  function clear() {
+    new Audio("public/click.mp3").play()
+    if (left.value && right.value != ''){
+      left.value.status = "close";
+      right.value.status = "close";
+      disabledL.value = false;
+      disabledR.value = false;
+    }
+  }
+
+  function answer() {
+    new Audio("public/click.mp3").play()
+    for(let i of buttons_left.value){
+      i.status = 'clear'
+    }
+    for(let j of buttons_right.value){
+      j.status = 'clear'
+    }
+  }
+
   function next() {
-    left.value.status = "close";
-    right.value.status = "close";
-    disabledL.value = false;
-    disabledR.value = false;
+    disabledL.value = false
+    disabledR.value = false
+    for(let i of buttons_left.value){
+      i.status = 'close'
+    }
+    for(let j of buttons_right.value){
+      j.status = 'close'
+    }
   }
   
   function shuffle(array) {
