@@ -85,7 +85,7 @@
           </template>
 
           <template v-slot:default="{}">
-            <v-card class="pa-3" title="Dialog">
+            <v-card class="pa-3" title="score">
               <v-table>
                 <thead>
                   <tr>
@@ -176,7 +176,7 @@
       </button>
     </div>
     <div class="text-center">
-      <v-btn :hidden="next" @click="nextbtn()" color="primary">NEXT</v-btn>
+      <v-btn :hidden="next" @click="nextbtn()" color="#03A9F4">NEXT</v-btn>
       <v-btn :hidden="finish" @click="checkScore(1)" color="green"
         >FINISH</v-btn
       >
