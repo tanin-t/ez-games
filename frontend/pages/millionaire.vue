@@ -67,99 +67,121 @@
 </style>
 
 <template>
-  <!-- Total  -->
-  <div class="d-flex justify-space-between">
-    <div class="w-25"></div>
-    <div>
-      <div class="score my-3">
-        {{ count }}
+  <div>
+    <!-- Total  -->
+    <div class="d-flex justify-space-between">
+      <div class="w-25"></div>
+      <div>
+        <div class="score my-3">
+          {{ count }}
+        </div>
+      </div>
+      <div class="w-25 d-flex justify-end align-center">
+        <v-dialog v-model="dialog" persistent width="500">
+          <template v-slot:activator="{ props }">
+            <v-btn size="x-large" class="me-3" v-bind="props">
+              <v-icon color="amber" class="text-h4">mdi-crown-circle</v-icon>
+            </v-btn>
+          </template>
+
+          <template v-slot:default="{}">
+            <v-card class="pa-3" title="Dialog">
+              <v-table>
+                <thead>
+                  <tr>
+                    <th class="text-left" style="width: 100px">No.</th>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in rank.score" :key="item">
+                    <td>{{ index + 1 }}</td>
+                    <td v-if="item.input">
+                      <v-text-field
+                        label="Enter your name"
+                        variant="underlined"
+                        v-model="item.name"
+                      >
+                      </v-text-field>
+                    </td>
+                    <td v-else>{{ item.name }}</td>
+                    <td>{{ item.score }}</td>
+                  </tr>
+                </tbody>
+              </v-table>
+              <div class="text-center mt-3">
+                <v-btn
+                  :hidden="statusBTN"
+                  color="red"
+                  text="Close"
+                  @click="!dialog"
+                ></v-btn>
+                <v-btn
+                  :hidden="!statusBTN"
+                  color="green"
+                  text="Save"
+                  @click="saveScore()"
+                ></v-btn>
+              </div>
+            </v-card>
+          </template>
+        </v-dialog>
       </div>
     </div>
-    <div class="w-25 d-flex justify-end align-center">
-      <v-dialog v-model="dialog" persistent width="500">
-        <template v-slot:activator="{ props }">
-          <v-btn size="x-large" class="me-3" v-bind="props">
-            <v-icon color="amber" class="text-h4">mdi-crown-circle</v-icon>
-          </v-btn>
-        </template>
 
-        <template v-slot:default="{}">
-          <v-card class="pa-3" title="Dialog">
-            <v-table>
-              <thead>
-                <tr>
-                  <th class="text-left" style="width: 100px">No.</th>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">score</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in rank.score" :key="item">
-                  <td>{{ index + 1 }}</td>
-                  <td v-if="item.input">
-                    <v-text-field
-                      label="Enter your name"
-                      variant="underlined"
-                      v-model="item.name"
-                    >
-                    </v-text-field>
-                  </td>
-                  <td v-else>{{ item.name }}</td>
-                  <td>{{ item.score }}</td>
-                </tr>
-              </tbody>
-            </v-table>
-            <div class="text-center mt-3">
-              <v-btn
-                :hidden="statusBTN"
-                color="red"
-                text="Close"
-                @click="dialog = !dialog"
-              ></v-btn>
-              <v-btn
-                :hidden="!statusBTN"
-                color="green"
-                text="Save"
-                @click="saveScore()"
-              ></v-btn>
-            </div>
-          </v-card>
-        </template>
-      </v-dialog>
+    <div id="showQ" class="show-question pa-3">
+      <div v-if="questions.length > 0">{{ questions[count].question }}</div>
     </div>
-  </div>
-
-  <div id="showQ" class="show-question pa-3">
-    <div v-if="questions.length > 0">{{ questions[count].question }}</div>
-  </div>
-  <div class="flex-container">
-    <button :disabled="stop" :class="btn[0]" id="b1" @click="handleBtnClick(1)">
-      <div v-if="questions.length > 0">
-        {{ questions[count].choice1 }}
-      </div>
-    </button>
-    <button :disabled="stop" :class="btn[1]" id="b2" @click="handleBtnClick(2)">
-      <div v-if="questions.length > 0">
-        {{ questions[count].choice2 }}
-      </div>
-    </button>
-    <button :disabled="stop" :class="btn[2]" id="b3" @click="handleBtnClick(3)">
-      <div v-if="questions.length > 0">
-        {{ questions[count].choice3 }}
-      </div>
-    </button>
-    <button :disabled="stop" :class="btn[3]" id="b4" @click="handleBtnClick(4)">
-      <div v-if="questions.length > 0">
-        {{ questions[count].choice4 }}
-      </div>
-    </button>
-  </div>
-  <div class="text-center">
-    <v-btn :hidden="next" @click="nextbtn()" color="primary">NEXT</v-btn>
-    <v-btn :hidden="finish" @click="checkScore(1)" color="green">FINISH</v-btn>
-    <v-btn :hidden="reset" @click="checkScore(0)" color="red">reset</v-btn>
-
-    <!-- dialog -->
+    <div class="flex-container">
+      <button
+        :disabled="stop"
+        :class="btn[0]"
+        id="b1"
+        @click="handleBtnClick(1)"
+      >
+        <div v-if="questions.length > 0">
+          {{ questions[count].choice1 }}
+        </div>
+      </button>
+      <button
+        :disabled="stop"
+        :class="btn[1]"
+        id="b2"
+        @click="handleBtnClick(2)"
+      >
+        <div v-if="questions.length > 0">
+          {{ questions[count].choice2 }}
+        </div>
+      </button>
+      <button
+        :disabled="stop"
+        :class="btn[2]"
+        id="b3"
+        @click="handleBtnClick(3)"
+      >
+        <div v-if="questions.length > 0">
+          {{ questions[count].choice3 }}
+        </div>
+      </button>
+      <button
+        :disabled="stop"
+        :class="btn[3]"
+        id="b4"
+        @click="handleBtnClick(4)"
+      >
+        <div v-if="questions.length > 0">
+          {{ questions[count].choice4 }}
+        </div>
+      </button>
+    </div>
+    <div class="text-center">
+      <v-btn :hidden="next" @click="nextbtn()" color="primary">NEXT</v-btn>
+      <v-btn :hidden="finish" @click="checkScore(1)" color="green"
+        >FINISH</v-btn
+      >
+      <v-btn :hidden="reset" @click="checkScore(0)" color="red">reset</v-btn>
+    </div>
   </div>
 </template>
 
@@ -172,8 +194,8 @@ let btn = ref(["", "", "", ""]);
 const st = ref("button");
 const next = ref(true);
 const finish = ref(true);
-const reset = ref(true);
 const stop = ref(false);
+const reset = ref(true);
 const statusBTN = ref(false);
 
 const rank = ref({});
@@ -193,8 +215,8 @@ function handleBtnClick(studentAns) {
     btn.value[studentAns - 1] = "red";
     btn.value[keyAns - 1] = "green";
     reset.value = false;
+    stop.value = true;
   }
-  stop.value = true;
 }
 
 function nextbtn() {
@@ -279,7 +301,7 @@ async function getScore() {
 async function postScore() {
   console.log(rank.value.score);
   await fetch(
-    `https://games.ez-zone.com/api/snippets/score/${rank.value.score}/update/`,
+    `https://games.ez-zone.com/api/snippets/score/rank.value.score/update/`,
     {
       method: "PUT",
       headers: {
