@@ -115,7 +115,7 @@
                   :hidden="statusBTN"
                   color="red"
                   text="Close"
-                  @click="!dialog"
+                  @click="dialog = !dialog"
                 ></v-btn>
                 <v-btn
                   :hidden="!statusBTN"
@@ -288,7 +288,7 @@ async function getScore() {
   );
   const data = await response.json();
   console.log("data", data[0].score);
-  if (data[0].score == "sfsdf") {
+  if (data[0].score == "") {
     data[0].score = [];
     rank.value = data[0];
     console.log("this is score if", rank.value);
@@ -299,9 +299,9 @@ async function getScore() {
 }
 
 async function postScore() {
-  console.log(rank.value.score);
+  console.log("Put Score", rank.value.id);
   await fetch(
-    `https://games.ez-zone.com/api/snippets/score/rank.value.score/update/`,
+    `https://games.ez-zone.com/api/snippets/score/${rank.value.id}/update/`,
     {
       method: "PUT",
       headers: {
