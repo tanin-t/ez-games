@@ -77,13 +77,23 @@
         </div>
       </div>
       <div class="w-25 d-flex justify-end align-center">
+        <v-btn size="x-large" class="me-3" @click="cut()">
+          <v-icon color="amber" class="text-h4">mdi-content-cut</v-icon>
+        </v-btn>
+        <v-btn
+          :disabled="skipSates"
+          size="x-large"
+          class="me-3"
+          @click="skip()"
+        >
+          <v-icon color="amber" class="text-h4">mdi-debug-step-over</v-icon>
+        </v-btn>
         <v-dialog v-model="dialog" persistent width="500">
           <template v-slot:activator="{ props }">
             <v-btn size="x-large" class="me-3" v-bind="props">
               <v-icon color="amber" class="text-h4">mdi-crown-circle</v-icon>
             </v-btn>
           </template>
-
           <template v-slot:default="{}">
             <v-card class="pa-3" title="score">
               <v-table>
@@ -135,7 +145,7 @@
     </div>
     <div class="flex-container">
       <button
-        :disabled="stop"
+        :disabled="stop1"
         :class="btn[0]"
         id="b1"
         @click="handleBtnClick(1)"
@@ -144,8 +154,9 @@
           {{ questions[count].choice1 }}
         </div>
       </button>
+
       <button
-        :disabled="stop"
+        :disabled="stop2"
         :class="btn[1]"
         id="b2"
         @click="handleBtnClick(2)"
@@ -154,8 +165,9 @@
           {{ questions[count].choice2 }}
         </div>
       </button>
+
       <button
-        :disabled="stop"
+        :disabled="stop3"
         :class="btn[2]"
         id="b3"
         @click="handleBtnClick(3)"
@@ -164,8 +176,9 @@
           {{ questions[count].choice3 }}
         </div>
       </button>
+
       <button
-        :disabled="stop"
+        :disabled="stop4"
         :class="btn[3]"
         id="b4"
         @click="handleBtnClick(4)"
@@ -175,6 +188,7 @@
         </div>
       </button>
     </div>
+
     <div class="text-center">
       <v-btn :hidden="next" @click="nextbtn()" color="#03A9F4">NEXT</v-btn>
       <v-btn :hidden="finish" @click="checkScore(1)" color="green"
@@ -194,16 +208,19 @@ let btn = ref(["", "", "", ""]);
 const st = ref("button");
 const next = ref(true);
 const finish = ref(true);
-const stop = ref(false);
+const stop1 = ref(false);
+const stop2 = ref(false);
+const stop3 = ref(false);
+const stop4 = ref(false);
 const reset = ref(true);
 const statusBTN = ref(false);
+const skipSates = ref(false);
 
 const rank = ref({});
 
+// check answer
 function handleBtnClick(studentAns) {
-  console.log(btn.value[0] + "disabled");
   const keyAns = questions.value[count.value].answer;
-  console.log(keyAns);
   if (keyAns == studentAns) {
     btn.value[studentAns - 1] = "green";
     if (count.value + 1 == questions.value.length) {
@@ -215,23 +232,33 @@ function handleBtnClick(studentAns) {
     btn.value[studentAns - 1] = "red";
     btn.value[keyAns - 1] = "green";
     reset.value = false;
-    stop.value = true;
+    stop1.value = true;
+    stop2.value = true;
+    stop3.value = true;
+    stop4.value = true;
   }
 }
 
 function nextbtn() {
   count.value = count.value + 1;
   console.log(count.value);
-  stop.value = false;
+  stop1.value = false;
+  stop2.value = false;
+  stop3.value = false;
+  stop4.value = false;
   btn.value = ["", "", "", ""];
   next.value = true;
 }
 
 function resetgame() {
   count.value = 0;
-  stop.value = false;
+  stop1.value = false;
+  stop2.value = false;
+  stop3.value = false;
+  stop4.value = false;
   btn.value = ["", "", "", ""];
   reset.value = true;
+  skipSates.value = false;
 }
 
 function checkScore(point) {
@@ -262,7 +289,6 @@ function checkScore(point) {
   }
   finish.value = true;
 }
-
 function saveScore() {
   rank.value.score.forEach((element) => {
     element.input = false;
@@ -311,7 +337,17 @@ async function postScore() {
     }
   );
 }
+function skip() {
+  count.value = count.value + 1;
+  skipSates.value = true;
+}
 
+function cut() {
+  const keyAns = questions.value[count.value].answer;
+  console.log(shuffle(btn));
+  stop1 = true;
+  stop2 = true;
+}
 getScore();
 getData();
 </script>
