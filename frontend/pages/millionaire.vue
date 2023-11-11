@@ -311,7 +311,7 @@ async function getData() {
 }
 
 async function getScore() {
-  const response = await fetch("http://games.ez-zone.com/api/snippets/score/");
+  const response = await fetch("https://games.ez-zone.com/api/snippets/score/");
   const data = await response.json();
   console.log("data", data[0].score);
   if (data[0].score == "") {
