@@ -77,7 +77,7 @@
         </div>
       </div>
       <div class="w-25 d-flex justify-end align-center">
-        <v-btn size="x-large" class="me-3" @click="cut()">
+        <v-btn size="x-large" class="me-3" @click="cut()" :disabled="cutSates">
           <v-icon color="amber" class="text-h4">mdi-content-cut</v-icon>
         </v-btn>
         <v-btn
@@ -215,6 +215,7 @@ const stop4 = ref(false);
 const reset = ref(true);
 const statusBTN = ref(false);
 const skipSates = ref(false);
+const cutSates = ref(false);
 
 const rank = ref({});
 
@@ -259,6 +260,7 @@ function resetgame() {
   btn.value = ["", "", "", ""];
   reset.value = true;
   skipSates.value = false;
+  cutSates.value = false;
 }
 
 function checkScore(point) {
@@ -344,10 +346,40 @@ function skip() {
 
 function cut() {
   const keyAns = questions.value[count.value].answer;
-  console.log(shuffle(btn));
-  stop1 = true;
-  stop2 = true;
+  let keep_stop = [
+    [stop1, 0],
+    [stop2, 1],
+    [stop3, 2],
+    [stop4, 3],
+  ];
+  keep_stop.splice(keyAns - 1, 1);
+  shuffle(keep_stop);
+  keep_stop[0][0] = true;
+  keep_stop[1][0] = true;
+  btn.value[keep_stop[0][1]] = "red";
+  btn.value[keep_stop[1][1]] = "red";
+  cutSates.value = true;
 }
+
+function shuffle(array) {
+  let currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
+
+  // ขณะที่ยังมีองค์ประกอบที่ยังไม่ถูกสุ่ม
+  while (currentIndex !== 0) {
+    // เลือกองค์ประกอบที่ยังไม่ถูกสุ่ม
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // และสลับมันกับองค์ประกอบปัจจุบัน
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
 getScore();
 getData();
 </script>
