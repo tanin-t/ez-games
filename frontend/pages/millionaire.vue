@@ -88,6 +88,17 @@
         >
           <v-icon color="amber" class="text-h4">mdi-debug-step-over</v-icon>
         </v-btn>
+
+        <v-btn
+          :disabled="twoSates"
+          size="x-large"
+          class="me-3"
+          @click="twoAnswer()"
+        >
+          <v-icon color="amber" class="text-h4"
+            >mdi-gesture-two-double-tap</v-icon
+          >
+        </v-btn>
         <v-dialog v-model="dialog" persistent width="500">
           <template v-slot:activator="{ props }">
             <v-btn size="x-large" class="me-3" v-bind="props">
@@ -190,8 +201,8 @@
     </div>
 
     <div class="text-center">
-      <v-btn :hidden="next" @click="nextbtn()" color="#03A9F4">NEXT</v-btn>
-      <v-btn :hidden="finish" @click="checkScore(1)" color="green"
+      <v-btn :hidden="next" @click="nextbtn()" color="green">NEXT</v-btn>
+      <v-btn :hidden="finish" @click="checkScore(1)" color="#FFC107"
         >FINISH</v-btn
       >
       <v-btn :hidden="reset" @click="checkScore(0)" color="red">reset</v-btn>
@@ -216,12 +227,14 @@ const reset = ref(true);
 const statusBTN = ref(false);
 const skipSates = ref(false);
 const cutSates = ref(false);
-
+const twoSates = ref(false);
+const twoAns = ref(0);
 const rank = ref({});
 
 // check answer
 function handleBtnClick(studentAns) {
   const keyAns = questions.value[count.value].answer;
+
   if (keyAns == studentAns) {
     btn.value[studentAns - 1] = "green";
     if (count.value + 1 == questions.value.length) {
@@ -230,14 +243,19 @@ function handleBtnClick(studentAns) {
       next.value = false;
     }
   } else {
-    btn.value[studentAns - 1] = "red";
-    btn.value[keyAns - 1] = "green";
-    reset.value = false;
-    stop1.value = true;
-    stop2.value = true;
-    stop3.value = true;
-    stop4.value = true;
+    if (twoAns.value == 0) {
+      btn.value[studentAns - 1] = "red";
+      btn.value[keyAns - 1] = "green";
+      reset.value = false;
+      stop1.value = true;
+      stop2.value = true;
+      stop3.value = true;
+      stop4.value = true;
+    } else {
+      btn.value[studentAns - 1] = "red";
+    }
   }
+  twoAns.value = 0;
 }
 
 function nextbtn() {
@@ -261,6 +279,7 @@ function resetgame() {
   reset.value = true;
   skipSates.value = false;
   cutSates.value = false;
+  twoSates.value = false;
 }
 
 function checkScore(point) {
@@ -378,6 +397,11 @@ function shuffle(array) {
     array[randomIndex] = temporaryValue;
   }
   return array;
+}
+
+function twoAnswer() {
+  twoAns.value = 1;
+  twoSates.value = true;
 }
 
 getScore();
